@@ -12,10 +12,9 @@ class Tree {
     this.root = null;
   }
 
-  buildTree() {
-    const uniqueArr = this.removeDuplicates();
+  buildTree(array = this.arr) {
+    const uniqueArr = this.removeDuplicates(array);
     const uniqueSortedArr = this.mergeSort(uniqueArr);
-    console.log(uniqueSortedArr);
 
     if (uniqueSortedArr.length === 0) return null;
 
@@ -47,8 +46,8 @@ class Tree {
     return this.root;
   }
 
-  removeDuplicates() {
-    return [...new Set(this.arr)];
+  removeDuplicates(array) {
+    return [...new Set(array)];
   }
 
   merge(array1, array2) {
@@ -325,23 +324,42 @@ class Tree {
 
     return false;
   }
+
+  rebalance() {
+    let newArray = this.inOrder();
+    this.buildTree(newArray);
+  }
 }
 
-const arr1 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+function elementPrinter(node) {
+  console.log(node.data);
+}
+
+const arr1 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]; // random array
 
 const tree = new Tree(arr1);
 
 tree.buildTree();
-tree.insert(2);
-// console.log(tree.find(0));
-tree.printTree();
-// console.log(tree.preOrder());
-// console.log(tree.inOrder());
-// console.log(tree.postOrder());
-// const node = tree.find(8);
-// console.log(tree.height(node));
-// console.log(tree.depth(node));
-console.log(tree.isBalanced());
-// tree.preOrder(console.log);
-// tree.levelOrder(console.log);
-// console.log(tree.levelOrder());
+
+console.log(tree.isBalanced()); // true
+console.log('-----------------------------');
+tree.preOrder(elementPrinter); // 8 4 1 3 5 7 67 9 23 324 6345
+console.log('-----------------------------');
+tree.inOrder(elementPrinter); // 1 3 4 5 7 8 9 23 67 324 6345
+console.log('-----------------------------');
+tree.postOrder(elementPrinter); // 3 1 7 5 4 23 9 6345 324 67 8
+console.log('-----------------------------');
+tree.insert(120);
+tree.insert(250);
+tree.insert(289);
+console.log('-----------------------------');
+console.log(tree.isBalanced()); // false
+tree.rebalance();
+console.log('-----------------------------');
+console.log(tree.isBalanced()); // true
+console.log('-----------------------------');
+tree.preOrder(elementPrinter); // 23 5 3 1 4 8 7 9 250 67 120 324 289 6345
+console.log('-----------------------------');
+tree.inOrder(elementPrinter); // 1 3 4 5 7 8 9 23 67 120 25 289 324 6345
+console.log('-----------------------------');
+tree.postOrder(elementPrinter); // 1 4 3 7 9 8 5 120 67 289 6345 324 25 23
